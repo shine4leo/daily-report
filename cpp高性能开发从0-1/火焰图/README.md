@@ -1,6 +1,10 @@
 # perf 性能分析
 
-> Linux 平台专属，以下内容基于 CentOS 环境。
+参考视频：
+  https://www.bilibili.com/video/BV1hg4y1o7Sb/?spm_id_from=333.337.search-card.all.click&vd_source=f6dd43f4cd2913718b38b561287f67b1
+
+  https://www.bilibili.com/video/BV1HPwZzXE85/?spm_id_from=333.337.search-card.all.click&vd_source=f6dd43f4cd2913718b38b561287f67b1
+
 
 Linux 性能分析与调试工具实践笔记：使用 **perf** 生成火焰图定位 CPU 热点、使用 **gdb** 调试 coredump 文件，以及使用 **ASan / Valgrind** 检测 C/C++ 内存问题。
 
