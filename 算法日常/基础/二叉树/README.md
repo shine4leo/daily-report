@@ -23,7 +23,7 @@
 | 题目 | 参考代码 | 备注 |
 | --- | --- | --- |
 | [100. 相同的树](https://leetcode.cn/problems/same-tree/) | [代码](https://leetcode.cn/problems/same-tree/solutions/2015056/ru-he-ling-huo-yun-yong-di-gui-lai-kan-s-empk/) |  |
-| [101. 对称二叉树](https://leetcode.cn/problems/symmetric-tree/) | [代码](https://leetcode.cn/problems/symmetric-tree/solutions/2015063/ru-he-ling-huo-yong-di-gui-lai-kan-s-6dq5/) |  |
+| [101. 对称二叉树](https://leetcode.cn/problems/symmetric-tree/) | [代码](https://leetcode.cn/problems/symmetric-tree/solutions/2015063/ru-he-ling-huo-yun-yong-di-gui-lai-kan-s-6dq5/) |  |
 | [110. 平衡二叉树](https://leetcode.cn/problems/balanced-binary-tree/) | [代码](https://leetcode.cn/problems/balanced-binary-tree/solutions/2015068/ru-he-ling-huo-yun-yong-di-gui-lai-kan-s-c3wj/) |  |
 | [199. 二叉树的右视图](https://leetcode.cn/problems/binary-tree-right-side-view/) | [代码](https://leetcode.cn/problems/binary-tree-right-side-view/solutions/2015061/ru-he-ling-huo-yun-yong-di-gui-lai-kan-s-r1nc/) |  |
 | [226. 翻转二叉树](https://leetcode.cn/problems/invert-binary-tree/) | [代码](https://leetcode.cn/problems/invert-binary-tree/solution/shi-pin-shen-ru-li-jie-di-gui-pythonjava-zhqh/) | 课后作业 |
