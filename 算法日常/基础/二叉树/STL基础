@@ -1,0 +1,339 @@
+# C++ STL 常用算法与迭代器
+
+> 学习来源：LeetCode 2476. 二叉搜索树最近节点查询  
+> 核心知识：`lower_bound`、`upper_bound`、`find`、`begin/end`、迭代器、`prev/next`
+
+## 1. STL 常用查找算法
+
+头文件：
+
+```cpp
+#include <algorithm>
+#include <iterator>
+#include <vector>
+using namespace std;
+```
+
+| 函数 | 功能 | 对有序 vector 的时间复杂度 |
+|---|---|---|
+| `lower_bound()` | 找到第一个 `>= x` 的位置 | O(log n) |
+| `upper_bound()` | 找到第一个 `> x` 的位置 | O(log n) |
+| `binary_search()` | 判断 x 是否存在 | O(log n) |
+| `find()` | 顺序查找 x | O(n) |
+
+注意：前三个函数要求搜索范围按照相应比较规则有序；`find()` 不要求排序。
+
+### 1.1 lower_bound()
+
+寻找第一个大于等于 x 的元素。
+
+```cpp
+vector<int> a = {2, 4, 6, 9, 13};
+
+auto it = lower_bound(a.begin(), a.end(), 7);
+
+cout << *it; // 9
+```
+
+如果希望得到数组下标：
+
+```cpp
+int i = lower_bound(a.begin(), a.end(), 7) - a.begin();
+
+cout << i; // 3
+```
+
+**记忆：lower_bound = 第一个 >= x。**
+
+### 1.2 upper_bound()
+
+寻找第一个严格大于 x 的元素。
+
+```cpp
+vector<int> a = {2, 4, 6, 9, 13};
+
+auto it = upper_bound(a.begin(), a.end(), 9);
+
+cout << *it; // 13
+```
+
+**记忆：upper_bound = 第一个 > x。**
+
+### 1.3 lower_bound 与 upper_bound 的区别
+
+```cpp
+vector<int> a = {1, 2, 2, 2, 5, 8};
+
+int l = lower_bound(a.begin(), a.end(), 2) - a.begin();
+int r = upper_bound(a.begin(), a.end(), 2) - a.begin();
+
+cout << l;     // 1
+cout << r;     // 4
+cout << r - l; // 3
+```
+
+这套写法可以直接计算有序数组中某个数字出现的次数。
+
+**常用公式：**
+
+`出现次数 = upper_bound 下标 - lower_bound 下标`
+
+### 1.4 find()
+
+查找指定元素，不需要有序数组。
+
+```cpp
+vector<int> a = {5, 2, 9, 3};
+
+auto it = find(a.begin(), a.end(), 9);
+
+if (it != a.end()) {
+    cout << *it; // 9
+}
+```
+
+找不到时返回 `a.end()`。
+
+---
+
+## 2. STL 迭代器基础
+
+迭代器（Iterator）可以理解成一种类似指针的对象，用于定位和访问容器中的元素。
+
+```cpp
+vector<int> a = {2, 4, 6, 9, 13};
+
+auto it = a.begin();
+
+cout << *it; // 2
+
+++it;
+
+cout << *it; // 4
+```
+
+### 常用操作
+
+| 表达式 | 含义 |
+|---|---|
+| `a.begin()` | 指向第一个元素 |
+| `a.end()` | 指向最后一个元素的后一个位置 |
+| `*it` | 读取迭代器指向的元素 |
+| `++it` | 向后移动一个位置 |
+| `--it` | 向前移动一个位置 |
+| `prev(it)` | 返回前一个位置的迭代器 |
+| `next(it)` | 返回后一个位置的迭代器 |
+| `it == a.end()` | 判断是否到达结束位置 |
+
+**特别注意：`a.end()` 不指向有效元素，不能执行 `*a.end()`。**
+
+### prev() 和 next()
+
+```cpp
+vector<int> a = {2, 4, 6, 9, 13};
+
+auto it = a.begin() + 2; // 指向 6
+
+cout << *it;       // 6
+cout << *prev(it); // 4
+cout << *next(it); // 9
+```
+
+与 `++it`、`--it` 不同，`prev(it)` 和 `next(it)` 不修改原来的 `it`。
+
+注意：移动后的位置必须合法，不能对 `begin()` 执行 `prev()`，也不能对最后一个元素执行 `next()` 后再解引用。
+
+### 迭代器与数组下标的关系
+
+对于 `vector`：
+
+```cpp
+int i = 2;
+auto it = a.begin() + i;
+```
+
+| 数组下标 | 迭代器 |
+|---|---|
+| `a[i]` | `*it` |
+| `a[i - 1]` | `*prev(it)` |
+| `a[i + 1]` | `*next(it)` |
+| `i == 0` | `it == a.begin()` |
+| `i == a.size()` | `it == a.end()` |
+
+迭代器转下标：
+
+```cpp
+int i = it - a.begin();
+```
+
+注意：迭代器相减只适用于 `vector` 等支持随机访问迭代器的容器，不适用于 `set`、`map` 等容器。
+
+---
+
+## 3. 常见使用场景
+
+### 场景一：判断有序数组中是否存在 x
+
+```cpp
+bool ok = binary_search(a.begin(), a.end(), x);
+```
+
+### 场景二：获取第一个 >= x 的下标
+
+```cpp
+int i = lower_bound(a.begin(), a.end(), x) - a.begin();
+```
+
+如果不存在满足条件的元素，`i == a.size()`。
+
+### 场景三：获取第一个 > x 的下标
+
+```cpp
+int i = upper_bound(a.begin(), a.end(), x) - a.begin();
+```
+
+### 场景四：向有序 vector 插入元素
+
+```cpp
+vector<int> a = {2, 4, 6, 9};
+
+auto it = lower_bound(a.begin(), a.end(), 7);
+
+a.insert(it, 7);
+
+// a = {2, 4, 6, 7, 9}
+```
+
+注意：查找是 O(log n)，但 vector 插入需要移动元素，整体操作是 O(n)。
+
+### 场景五：查询左右最近的数字（LeetCode 2476）
+
+假设有序数组：
+
+```cpp
+vector<int> a = {2, 4, 6, 9, 13};
+int x = 7;
+```
+
+要求：
+
+- `mini`：不超过 x 的最大值。
+- `maxi`：不小于 x 的最小值。
+
+代码：
+
+```cpp
+int n = a.size();
+
+int i = lower_bound(a.begin(), a.end(), x) - a.begin();
+
+int mini = -1, maxi = -1;
+
+if (i < n && a[i] == x) {
+    mini = maxi = x;
+} else {
+    if (i > 0)
+        mini = a[i - 1];
+
+    if (i < n)
+        maxi = a[i];
+}
+```
+
+查询 x = 7 时：
+
+```cpp
+i = 3;
+mini = 6;
+maxi = 9;
+```
+
+特殊情况：
+
+| x | mini | maxi |
+|---|---|---|
+| 1 | -1 | 2 |
+| 7 | 6 | 9 |
+| 9 | 9 | 9 |
+| 20 | 13 | -1 |
+
+**重要：必须先判断下标是否有效，才能访问 `a[i]` 或 `a[i-1]`。**
+
+---
+
+## 4. 常见错误
+
+**错误一：直接解引用 end()**
+
+```cpp
+auto it = lower_bound(a.begin(), a.end(), x);
+cout << *it; // 如果 it == a.end()，错误
+```
+
+正确：
+
+```cpp
+if (it != a.end())
+    cout << *it;
+```
+
+**错误二：对 begin() 使用 prev()**
+
+```cpp
+auto it = a.begin();
+cout << *prev(it); // 错误
+```
+
+正确：
+
+```cpp
+if (it != a.begin())
+    cout << *prev(it);
+```
+
+**错误三：无序数组直接使用 lower_bound()**
+
+```cpp
+vector<int> a = {9, 2, 6, 1};
+
+lower_bound(a.begin(), a.end(), 6); // 不满足有序前提
+```
+
+先排序：
+
+```cpp
+sort(a.begin(), a.end());
+```
+
+然后再使用二分查找。
+
+---
+
+## 5. 一分钟速记
+
+| 想解决的问题 | 直接想到 |
+|---|---|
+| 第一个 >= x | `lower_bound` |
+| 第一个 > x | `upper_bound` |
+| 判断有序数组是否包含 x | `binary_search` |
+| 在一般数组中寻找 x | `find` |
+| 获取迭代器对应的值 | `*it` |
+| 获取迭代器前一个元素 | `*prev(it)` |
+| 获取迭代器后一个元素 | `*next(it)` |
+| 迭代器转换成 vector 下标 | `it - a.begin()` |
+| 判断是否查找失败 | `it == a.end()` |
+
+**核心原则：**
+
+1. 先确认数据是否有序。
+2. 再确定要找的是 `>= x` 还是 `> x`。
+3. 优先使用 STL，避免重复手写二分。
+4. 访问元素前必须检查边界。
+5. 对于 `vector`，不习惯迭代器时可以先转换为下标。
+
+**相关练习题：**
+
+- LeetCode 34：在排序数组中查找元素的第一个和最后一个位置
+- LeetCode 35：搜索插入位置
+- LeetCode 704：二分查找
+- LeetCode 2476：二叉搜索树最近节点查询
